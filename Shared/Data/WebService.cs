@@ -62,7 +62,26 @@ namespace XamarinStore
 						var request = CreateRequest ("products" + extraParams);
 
 						string response = ReadResponseText (request);
-						return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Product>> (response);
+                        var items = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Product>>(response);
+                        foreach (var i in items)
+                        {
+                            if (i.ProductType == ProductType.MensCSharpShirt)
+                            {
+                                foreach (var c in i.Colors)
+                                {
+                                    if (c.Name == "Navy")
+                                    {
+                                        c.ImageUrls = new[] { "http://www.itwriting.com/blog/wp-content/uploads/2013/06/image8.png" };
+                                    }
+                                    else if (c.Name == "Green")
+                                    {
+                                        c.ImageUrls = new[] { "http://blog.xamarin.com/wp-content/uploads/2014/04/Screen-Shot-2014-04-03-at-13.31.34.png" };
+                                    }
+                                }
+
+                            }
+                        }
+                        return items;
 					} catch (Exception ex) {
 						Console.WriteLine (ex);
 						return new List<Product> ();
